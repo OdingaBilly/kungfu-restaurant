@@ -52,10 +52,27 @@ const Footer = () => {
             <h4 className="font-semibold mb-4 text-foreground">Contact</h4>
             <ul className="space-y-3 text-foreground/50">
               <li>hello@kungfupanda.food</li>
-              <li>+1 (555) 123-4567</li>
-              <li>123 Dragon Street</li>
-              <li>Food City, FC 12345</li>
+              <li>+2547-9702-1412</li>
+              <li>Nairobi, Kenya</li>
             </ul>
+          </div>
+        </div>
+
+        {/* Location Map */}
+        <div className="mt-12">
+          <h4 className="font-semibold mb-4 text-foreground font-display text-xl">Find Us</h4>
+          <div className="rounded-lg overflow-hidden border border-border">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.7957809649374!2d36.75909007510523!3d-1.2972102356384356!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f1b00575bd5b3%3A0xa84075495653646a!2sKungfu%20Restaurant!5e0!3m2!1sen!2ske!4v1767623340222!5m2!1sen!2ske" 
+              width="100%" 
+              height="350" 
+              style={{ border: 0 }} 
+              allowFullScreen 
+              loading="lazy" 
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Kungfu Restaurant Location"
+              className="w-full"
+            />
           </div>
         </div>
 
