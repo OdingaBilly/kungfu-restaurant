@@ -4,6 +4,8 @@ import MenuSection from "@/components/MenuSection";
 import AboutSection from "@/components/AboutSection";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
+import CartDrawer from "@/components/menu/CartDrawer";
+import FloatingCart from "@/components/menu/FloatingCart";
 
 const Index = () => {
   return (
@@ -14,6 +16,8 @@ const Index = () => {
       <AboutSection />
       <CTASection />
       <Footer />
+      <FloatingCart />
+      <CartDrawer />
     </div>
   );
 };
