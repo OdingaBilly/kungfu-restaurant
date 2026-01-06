@@ -3,13 +3,15 @@ import { Plus, Flame } from "lucide-react";
 import { MenuItem, CURRENCY } from "@/data/menuData";
 import { useCart } from "@/contexts/CartContext";
 import { cn } from "@/lib/utils";
+import { getItemImage } from "@/data/menuImages";
 
 interface MenuItemCardProps {
   item: MenuItem;
+  categorySlug?: string;
   onQuickView: (item: MenuItem) => void;
 }
 
-const MenuItemCard = ({ item, onQuickView }: MenuItemCardProps) => {
+const MenuItemCard = ({ item, categorySlug = "burgers", onQuickView }: MenuItemCardProps) => {
   const { addItem, setIsOpen } = useCart();
   const [isAdding, setIsAdding] = useState(false);
 
@@ -28,17 +30,24 @@ const MenuItemCard = ({ item, onQuickView }: MenuItemCardProps) => {
     return `${CURRENCY} ${price.toLocaleString()}`;
   };
 
+  const itemImage = getItemImage(item.name, categorySlug, item.tags);
+
   return (
     <div
       onClick={() => onQuickView(item)}
       className="group relative bg-card rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_20px_50px_-12px_hsla(0,100%,38%,0.25)]"
     >
-      {/* Image placeholder with gradient */}
-      <div className="aspect-[4/3] bg-gradient-to-br from-secondary to-muted relative overflow-hidden">
+      {/* Image with real food photo */}
+      <div className="aspect-[4/3] relative overflow-hidden">
+        <img 
+          src={itemImage} 
+          alt={item.name}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
         
         {/* Badges */}
-        <div className="absolute top-3 left-3 flex gap-2">
+        <div className="absolute top-3 left-3 flex gap-2 flex-wrap">
           {item.isCombo && (
             <span className="bg-primary text-primary-foreground text-xs font-bold uppercase px-2.5 py-1 rounded-full">
               Combo
@@ -54,11 +63,6 @@ const MenuItemCard = ({ item, onQuickView }: MenuItemCardProps) => {
               🌱 Veg
             </span>
           )}
-        </div>
-        
-        {/* Placeholder icon */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-20">
-          <span className="text-6xl">🍔</span>
         </div>
       </div>
 

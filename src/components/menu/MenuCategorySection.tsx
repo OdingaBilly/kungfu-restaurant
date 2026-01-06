@@ -66,7 +66,7 @@ const MenuCategorySection = ({ category, onQuickView }: MenuCategorySectionProps
                 className="animate-fade-in"
                 style={{ animationDelay: `${index * 0.05}s` }}
               >
-                <MenuItemCard item={item} onQuickView={onQuickView} />
+                <MenuItemCard item={item} categorySlug={category.slug} onQuickView={onQuickView} />
               </div>
             ))}
           </div>
@@ -82,7 +82,7 @@ const MenuCategorySection = ({ category, onQuickView }: MenuCategorySectionProps
               className="animate-fade-in"
               style={{ animationDelay: `${index * 0.05}s` }}
             >
-              <MenuItemCard item={item} onQuickView={onQuickView} />
+              <MenuItemCard item={item} categorySlug={category.slug} onQuickView={onQuickView} />
             </div>
           ))}
         </div>
