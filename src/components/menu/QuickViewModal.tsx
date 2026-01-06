@@ -4,18 +4,22 @@ import { MenuItem, CURRENCY } from "@/data/menuData";
 import { useCart } from "@/contexts/CartContext";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { getItemImage } from "@/data/menuImages";
 
 interface QuickViewModalProps {
   item: MenuItem | null;
+  categorySlug?: string;
   isOpen: boolean;
   onClose: () => void;
 }
 
-const QuickViewModal = ({ item, isOpen, onClose }: QuickViewModalProps) => {
+const QuickViewModal = ({ item, categorySlug = "burgers", isOpen, onClose }: QuickViewModalProps) => {
   const { addItem, setIsOpen: openCart } = useCart();
   const [quantity, setQuantity] = useState(1);
 
   if (!item) return null;
+
+  const itemImage = getItemImage(item.name, categorySlug, item.tags);
 
   const formatPrice = (price: number) => {
     return `${CURRENCY} ${price.toLocaleString()}`;
@@ -38,10 +42,12 @@ const QuickViewModal = ({ item, isOpen, onClose }: QuickViewModalProps) => {
         </VisuallyHidden>
         
         {/* Image */}
-        <div className="aspect-video bg-gradient-to-br from-secondary to-muted relative">
-          <div className="absolute inset-0 flex items-center justify-center opacity-30">
-            <span className="text-8xl">🍔</span>
-          </div>
+        <div className="aspect-video relative overflow-hidden">
+          <img 
+            src={itemImage} 
+            alt={item.name}
+            className="w-full h-full object-cover"
+          />
           
           {/* Badges */}
           <div className="absolute top-4 left-4 flex gap-2">

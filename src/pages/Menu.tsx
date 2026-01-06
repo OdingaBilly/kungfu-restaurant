@@ -11,6 +11,12 @@ import CartDrawer from "@/components/menu/CartDrawer";
 const Menu = () => {
   const [activeCategory, setActiveCategory] = useState(menuCategories[0]?.slug || "");
   const [quickViewItem, setQuickViewItem] = useState<MenuItem | null>(null);
+  const [quickViewCategory, setQuickViewCategory] = useState<string>("burgers");
+
+  const handleQuickView = (item: MenuItem, categorySlug: string) => {
+    setQuickViewItem(item);
+    setQuickViewCategory(categorySlug);
+  };
 
   const handleCategoryChange = (slug: string) => {
     setActiveCategory(slug);
@@ -73,7 +79,7 @@ const Menu = () => {
           <MenuCategorySection
             key={category.slug}
             category={category}
-            onQuickView={setQuickViewItem}
+            onQuickView={(item) => handleQuickView(item, category.slug)}
           />
         ))}
       </div>
@@ -87,6 +93,7 @@ const Menu = () => {
       {/* Quick View Modal */}
       <QuickViewModal
         item={quickViewItem}
+        categorySlug={quickViewCategory}
         isOpen={!!quickViewItem}
         onClose={() => setQuickViewItem(null)}
       />
