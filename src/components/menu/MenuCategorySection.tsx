@@ -1,4 +1,4 @@
-import { MenuCategory, MenuItem } from "@/data/menuData";
+import { MenuCategory, MenuItem, getAllItemsFromCategory } from "@/data/menuData";
 import MenuItemCard from "./MenuItemCard";
 import TypeWriter from "@/components/TypeWriter";
 
@@ -8,6 +8,8 @@ interface MenuCategorySectionProps {
 }
 
 const MenuCategorySection = ({ category, onQuickView }: MenuCategorySectionProps) => {
+  const hasSubcategories = category.subcategories && category.subcategories.length > 0;
+
   return (
     <section id={`category-${category.slug}`} className="py-12">
       {/* Category Header */}
@@ -51,18 +53,40 @@ const MenuCategorySection = ({ category, onQuickView }: MenuCategorySectionProps
         </div>
       )}
 
-      {/* Items Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {category.items.map((item, index) => (
-          <div
-            key={item.sku}
-            className="animate-fade-in"
-            style={{ animationDelay: `${index * 0.05}s` }}
-          >
-            <MenuItemCard item={item} onQuickView={onQuickView} />
+      {/* Subcategories */}
+      {hasSubcategories && category.subcategories!.map((subcategory) => (
+        <div key={subcategory.slug} className="mb-10">
+          <h3 className="font-semibold text-xl text-foreground/90 mb-4 border-l-4 border-primary pl-4">
+            {subcategory.name}
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {subcategory.items.map((item, index) => (
+              <div
+                key={item.id}
+                className="animate-fade-in"
+                style={{ animationDelay: `${index * 0.05}s` }}
+              >
+                <MenuItemCard item={item} onQuickView={onQuickView} />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
+
+      {/* Direct Items (if no subcategories) */}
+      {!hasSubcategories && category.items && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {category.items.map((item, index) => (
+            <div
+              key={item.id}
+              className="animate-fade-in"
+              style={{ animationDelay: `${index * 0.05}s` }}
+            >
+              <MenuItemCard item={item} onQuickView={onQuickView} />
+            </div>
+          ))}
+        </div>
+      )}
     </section>
   );
 };
