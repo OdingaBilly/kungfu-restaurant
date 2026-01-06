@@ -44,9 +44,14 @@ const MenuItemCard = ({ item, onQuickView }: MenuItemCardProps) => {
               Combo
             </span>
           )}
-          {item.spiceLevel && item.spiceLevel >= 3 && (
+          {item.spiceLevel && item.spiceLevel >= 1 && (
             <span className="bg-accent text-accent-foreground text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
               <Flame className="w-3 h-3" /> Spicy
+            </span>
+          )}
+          {item.isVegetarian && (
+            <span className="bg-green-600 text-white text-xs font-bold px-2.5 py-1 rounded-full">
+              🌱 Veg
             </span>
           )}
         </div>

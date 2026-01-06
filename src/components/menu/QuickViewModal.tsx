@@ -50,9 +50,14 @@ const QuickViewModal = ({ item, isOpen, onClose }: QuickViewModalProps) => {
                 Combo
               </span>
             )}
-            {item.spiceLevel && item.spiceLevel >= 3 && (
+            {item.spiceLevel && item.spiceLevel >= 1 && (
               <span className="bg-accent text-accent-foreground text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1">
                 <Flame className="w-3 h-3" /> Spicy
+              </span>
+            )}
+            {item.isVegetarian && (
+              <span className="bg-green-600 text-white text-xs font-bold px-3 py-1.5 rounded-full">
+                🌱 Veg
               </span>
             )}
           </div>
@@ -78,9 +83,9 @@ const QuickViewModal = ({ item, isOpen, onClose }: QuickViewModalProps) => {
               {formatPrice(item.price)}
             </span>
             
-            {item.isUpgradable && (
+            {item.calories && (
               <span className="text-sm text-foreground/50 bg-secondary px-3 py-1 rounded-full">
-                Upgradable
+                {item.calories} cal
               </span>
             )}
           </div>
