@@ -56,7 +56,7 @@ const MenuCategorySection = ({ category, onQuickView }: MenuCategorySectionProps
       {/* Subcategories */}
       {hasSubcategories && category.subcategories!.map((subcategory) => (
         <div key={subcategory.slug} className="mb-10">
-          <h3 className="font-semibold text-xl text-foreground/90 mb-4 border-l-4 border-primary pl-4">
+          <h3 className="font-display font-semibold text-xl text-foreground/90 mb-4 border-l-4 border-primary pl-4">
             {subcategory.name}
           </h3>
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-5">

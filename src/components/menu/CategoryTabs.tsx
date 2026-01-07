@@ -48,7 +48,7 @@ const CategoryTabs = ({ categories, activeCategory, onCategoryChange }: Category
               key={category.slug}
               onClick={() => onCategoryChange(category.slug)}
               className={cn(
-                "relative whitespace-nowrap px-5 py-2.5 rounded-full font-medium text-sm transition-all duration-300",
+                "relative whitespace-nowrap px-5 py-2.5 rounded-full font-display font-medium text-sm transition-all duration-300",
                 activeCategory === category.slug
                   ? "bg-primary text-primary-foreground shadow-lg"
                   : "bg-secondary text-foreground/70 hover:bg-secondary/80 hover:text-foreground"

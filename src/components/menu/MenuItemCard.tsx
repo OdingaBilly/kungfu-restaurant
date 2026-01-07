@@ -70,7 +70,7 @@ const MenuItemCard = ({ item, categorySlug = "burgers", onQuickView }: MenuItemC
 
       {/* Content - compact padding on mobile */}
       <div className="p-2.5 sm:p-4">
-        <h3 className="font-semibold text-foreground text-sm sm:text-base lg:text-lg mb-0.5 sm:mb-1 group-hover:text-primary transition-colors line-clamp-1">
+        <h3 className="font-display font-semibold text-foreground text-sm sm:text-base lg:text-lg mb-0.5 sm:mb-1 group-hover:text-primary transition-colors line-clamp-1">
           {item.name}
         </h3>
         {item.description && (
