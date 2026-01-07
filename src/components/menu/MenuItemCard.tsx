@@ -35,63 +35,65 @@ const MenuItemCard = ({ item, categorySlug = "burgers", onQuickView }: MenuItemC
   return (
     <div
       onClick={() => onQuickView(item)}
-      className="group relative bg-card rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_20px_50px_-12px_hsla(0,100%,38%,0.25)]"
+      className="group relative bg-card rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_10px_30px_-8px_hsla(0,100%,38%,0.25)]"
     >
-      {/* Image with real food photo */}
-      <div className="aspect-[4/3] relative overflow-hidden">
+      {/* Image with real food photo - compact on mobile */}
+      <div className="aspect-square sm:aspect-[4/3] relative overflow-hidden">
         <img 
           src={itemImage} 
           alt={item.name}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
         
-        {/* Badges */}
-        <div className="absolute top-3 left-3 flex gap-2 flex-wrap">
+        {/* Badges - smaller on mobile */}
+        <div className="absolute top-1.5 left-1.5 sm:top-3 sm:left-3 flex gap-1 sm:gap-2 flex-wrap max-w-[90%]">
           {item.isCombo && (
-            <span className="bg-primary text-primary-foreground text-xs font-bold uppercase px-2.5 py-1 rounded-full">
+            <span className="bg-primary text-primary-foreground text-[10px] sm:text-xs font-bold uppercase px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full">
               Combo
             </span>
           )}
           {item.spiceLevel && item.spiceLevel >= 1 && (
-            <span className="bg-accent text-accent-foreground text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
-              <Flame className="w-3 h-3" /> Spicy
+            <span className="bg-accent text-accent-foreground text-[10px] sm:text-xs font-bold px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full flex items-center gap-0.5 sm:gap-1">
+              <Flame className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+              <span className="hidden sm:inline">Spicy</span>
             </span>
           )}
           {item.isVegetarian && (
-            <span className="bg-green-600 text-white text-xs font-bold px-2.5 py-1 rounded-full">
-              🌱 Veg
+            <span className="bg-green-600 text-white text-[10px] sm:text-xs font-bold px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full">
+              🌱<span className="hidden sm:inline ml-0.5">Veg</span>
             </span>
           )}
         </div>
       </div>
 
-      {/* Content */}
-      <div className="p-4">
-        <h3 className="font-semibold text-foreground text-lg mb-1 group-hover:text-primary transition-colors">
+      {/* Content - compact padding on mobile */}
+      <div className="p-2.5 sm:p-4">
+        <h3 className="font-semibold text-foreground text-sm sm:text-base lg:text-lg mb-0.5 sm:mb-1 group-hover:text-primary transition-colors line-clamp-1">
           {item.name}
         </h3>
         {item.description && (
-          <p className="text-foreground/60 text-sm mb-3 line-clamp-2">
+          <p className="text-foreground/60 text-xs sm:text-sm mb-2 sm:mb-3 line-clamp-1 sm:line-clamp-2">
             {item.description}
           </p>
         )}
         
-        <div className="flex items-center justify-between">
-          <span className="text-primary font-bold text-lg">
+        <div className="flex items-center justify-between gap-1">
+          <span className="text-primary font-bold text-sm sm:text-base lg:text-lg">
             {formatPrice(item.price)}
           </span>
           
           <button
             onClick={handleAddToCart}
             className={cn(
-              "flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-full text-sm font-medium transition-all duration-300",
+              "flex items-center gap-1 sm:gap-2 bg-primary text-primary-foreground px-2 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300",
               "hover:shadow-lg hover:scale-105 active:scale-95",
               isAdding && "animate-bounce bg-green-600"
             )}
           >
-            <Plus className="w-4 h-4" />
-            {isAdding ? "Added!" : "Add"}
+            <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline">{isAdding ? "Added!" : "Add"}</span>
           </button>
         </div>
       </div>

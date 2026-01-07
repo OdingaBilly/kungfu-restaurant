@@ -4,10 +4,11 @@ import doubleBurger from "@/assets/menu/double-burger.jpg";
 import classicBurger from "@/assets/menu/classic-burger.jpg";
 import friedChicken from "@/assets/menu/fried-chicken.jpg";
 import chickenStrips from "@/assets/menu/chicken-strips.jpg";
+import crispyStrips from "@/assets/menu/crispy-strips.jpg";
 import streetPack from "@/assets/menu/street-pack.jpg";
 import chineseNoodles from "@/assets/menu/chinese-noodles.jpg";
 import chineseFish from "@/assets/menu/chinese-fish.jpg";
-import chineseVegetarian from "@/assets/menu/chinese-vegetarian.jpg";
+import chineseFishSpicy from "@/assets/menu/chinese-fish-spicy.jpg";
 import chapatiStew from "@/assets/menu/chapati-stew.jpg";
 import ugaliFish from "@/assets/menu/ugali-fish.jpg";
 import bobaTea from "@/assets/menu/boba-tea.png";
@@ -21,7 +22,7 @@ import sandwich from "@/assets/menu/sandwich.jpg";
 import snacks from "@/assets/menu/snacks.jpg";
 import salad from "@/assets/menu/salad.jpg";
 
-// New Chinese & specialty images
+// Chinese & specialty images
 import seaweedSoup from "@/assets/menu/seaweed-soup.jpg";
 import sichuanChicken from "@/assets/menu/sichuan-chicken.jpg";
 import kungpaoNoodles from "@/assets/menu/kungpao-noodles.jpg";
@@ -33,15 +34,24 @@ import vanillaTea from "@/assets/menu/vanilla-tea.png";
 import chicken2pc from "@/assets/menu/chicken-2pc.png";
 import chicken3pc from "@/assets/menu/chicken-3pc.png";
 
+// New vegetarian, beef/pork, seafood images
+import braisedBeef from "@/assets/menu/braised-beef.jpg";
+import vegetableStirFry from "@/assets/menu/vegetable-stir-fry.png";
+import beefPeppers from "@/assets/menu/beef-peppers.jpg";
+import snowPeas from "@/assets/menu/snow-peas.jpg";
+import dumplings from "@/assets/menu/dumplings.jpg";
+import eggFriedRice from "@/assets/menu/egg-fried-rice.jpg";
+import crayfish from "@/assets/menu/crayfish.jpg";
+
 // Default images by category slug
 export const categoryImages: Record<string, string> = {
   "burgers": classicBurger,
   "chicken-pieces": friedChicken,
-  "strips-wraps": chickenStrips,
+  "strips-wraps": crispyStrips,
   "street-packs": streetPack,
   "taste-of-china": kungpaoNoodles,
-  "chinese-vegetarian-meat": chineseVegetarian,
-  "chinese-seafood": chineseFish,
+  "chinese-vegetarian-meat": vegetableStirFry,
+  "chinese-seafood": chineseFishSpicy,
   "african": chickenCurry,
   "snacks-breakfast": snacks,
   "milk-teas-coffee": taroBoba,
@@ -82,9 +92,9 @@ export function getItemImage(
     return friedChicken;
   }
   
-  // Strips and wraps
+  // Strips and wraps - use crispy strips image
   if (categorySlug === "strips-wraps" || tagsLower.includes("strips") || tagsLower.includes("wrap")) {
-    return chickenStrips;
+    return crispyStrips;
   }
   
   // Street packs
@@ -98,8 +108,11 @@ export function getItemImage(
     if (tagsLower.includes("soup") || nameLower.includes("soup")) {
       return seaweedSoup;
     }
-    // Rice & Noodles
-    if (tagsLower.includes("noodles") || tagsLower.includes("rice") || nameLower.includes("noodle") || nameLower.includes("rice")) {
+    // Rice & Noodles - use egg fried rice
+    if (tagsLower.includes("rice") || nameLower.includes("rice") || nameLower.includes("fried rice")) {
+      return eggFriedRice;
+    }
+    if (tagsLower.includes("noodles") || nameLower.includes("noodle")) {
       return kungpaoNoodles;
     }
     // Duck & Chicken
@@ -109,29 +122,58 @@ export function getItemImage(
     return kungpaoNoodles;
   }
   
-  // Chinese vegetarian, beef & pork
+  // Chinese vegetarian, beef & pork - EXTENSIVE UPDATES
   if (categorySlug === "chinese-vegetarian-meat") {
-    // Cold dishes
-    if (tagsLower.includes("cold") || tagsLower.includes("appetizer") || nameLower.includes("cold")) {
-      return sichuanChicken;
+    // Cold dishes - use dumplings
+    if (tagsLower.includes("cold") || tagsLower.includes("appetizer") || nameLower.includes("cold") || nameLower.includes("salad")) {
+      return dumplings;
     }
-    // Vegetarian dishes
-    if (tagsLower.includes("vegetarian") || tagsLower.includes("tofu") || tagsLower.includes("potato") || tagsLower.includes("eggplant")) {
-      return chineseVegetarian;
+    // Snow peas and green beans
+    if (nameLower.includes("snow pea") || nameLower.includes("green bean") || nameLower.includes("兰豆") || nameLower.includes("荷兰豆")) {
+      return snowPeas;
     }
-    // Beef & Pork dishes
-    if (tagsLower.includes("beef") || tagsLower.includes("pork") || tagsLower.includes("lamb") || tagsLower.includes("goat")) {
-      return sichuanChicken;
+    // Vegetarian dishes with vegetables
+    if (tagsLower.includes("vegetarian") || tagsLower.includes("tofu") || tagsLower.includes("potato") || 
+        tagsLower.includes("eggplant") || tagsLower.includes("cauliflower") || nameLower.includes("mushroom") ||
+        nameLower.includes("bok choy") || nameLower.includes("油菜") || nameLower.includes("香菇")) {
+      return vegetableStirFry;
     }
-    return chineseVegetarian;
+    // Tomato and egg
+    if (nameLower.includes("tomato") || nameLower.includes("西红柿") || nameLower.includes("egg") || nameLower.includes("鸡蛋")) {
+      return eggFriedRice;
+    }
+    // Beef & Pork dishes - use braised beef
+    if (tagsLower.includes("beef") || nameLower.includes("beef") || nameLower.includes("牛")) {
+      return braisedBeef;
+    }
+    // Pork and lamb - use beef peppers
+    if (tagsLower.includes("pork") || tagsLower.includes("lamb") || tagsLower.includes("goat") || 
+        nameLower.includes("pork") || nameLower.includes("lamb") || nameLower.includes("goat") ||
+        nameLower.includes("羊") || nameLower.includes("猪") || nameLower.includes("腊肉")) {
+      return beefPeppers;
+    }
+    // Stir-fry with peppers
+    if (nameLower.includes("pepper") || nameLower.includes("椒") || nameLower.includes("stir")) {
+      return beefPeppers;
+    }
+    return vegetableStirFry;
   }
   
-  // Chinese seafood & specials
-  if (categorySlug === "chinese-seafood" || tagsLower.includes("seafood") || tagsLower.includes("fish") || tagsLower.includes("shrimp")) {
-    return chineseFish;
+  // Chinese seafood & specials - NEW IMAGES
+  if (categorySlug === "chinese-seafood" || tagsLower.includes("seafood")) {
+    // Shrimp or crayfish dishes
+    if (tagsLower.includes("shrimp") || nameLower.includes("shrimp") || nameLower.includes("虾") || 
+        nameLower.includes("crayfish") || nameLower.includes("prawn")) {
+      return crayfish;
+    }
+    // Fish dishes
+    if (tagsLower.includes("fish") || nameLower.includes("fish") || nameLower.includes("鱼")) {
+      return chineseFishSpicy;
+    }
+    return crayfish;
   }
   
-  // African dishes - use chicken curry as first/default
+  // African dishes - use chicken curry as default
   if (categorySlug === "african") {
     if (nameLower.includes("ugali") && nameLower.includes("fish")) return ugaliFish;
     if (nameLower.includes("chapati")) return chapatiStew;
@@ -139,21 +181,29 @@ export function getItemImage(
     return chickenCurry;
   }
   
-  // Drinks - Milk Teas & Coffee
+  // Drinks - Milk Teas & Coffee - IMPROVED MAPPING
   if (categorySlug === "milk-teas-coffee") {
-    // Coffee drinks
-    if (tagsLower.includes("coffee") || tagsLower.includes("espresso") || tagsLower.includes("latte") || tagsLower.includes("cappuccino") || tagsLower.includes("mocha") || tagsLower.includes("americano")) {
+    // Coffee drinks - all coffee variants
+    if (tagsLower.includes("coffee") || tagsLower.includes("espresso") || tagsLower.includes("latte") || 
+        tagsLower.includes("cappuccino") || tagsLower.includes("mocha") || tagsLower.includes("americano") ||
+        tagsLower.includes("macchiato") || tagsLower.includes("affogato") || tagsLower.includes("dawa") ||
+        nameLower.includes("coffee") || nameLower.includes("espresso") || nameLower.includes("latte") ||
+        nameLower.includes("cappuccino") || nameLower.includes("mocha") || nameLower.includes("americano") ||
+        nameLower.includes("flat white") || nameLower.includes("macchiato")) {
       return coffee;
     }
     // Specific milk tea flavors
     if (nameLower.includes("vanilla")) return vanillaTea;
     if (nameLower.includes("kumquat") || nameLower.includes("komquat")) return komquatTea;
     if (nameLower.includes("taro") || nameLower.includes("pearl") || nameLower.includes("bubble") || nameLower.includes("boba")) return taroBoba;
+    // Plain tea
+    if (tagsLower.includes("tea") && !tagsLower.includes("milk tea")) {
+      return vanillaTea;
+    }
     // General milk tea
     if (tagsLower.includes("milk tea") || tagsLower.includes("boba") || tagsLower.includes("bubble")) {
       return taroBoba;
     }
-    if (tagsLower.includes("tea")) return vanillaTea;
     return taroBoba;
   }
   
@@ -162,15 +212,16 @@ export function getItemImage(
     if (tagsLower.includes("mojito") || nameLower.includes("mojito")) {
       return strawberryMojito;
     }
-    if (tagsLower.includes("shake")) return milkshake;
-    if (nameLower.includes("chocolate")) return milkshake;
+    if (tagsLower.includes("shake") || tagsLower.includes("chocolate") || nameLower.includes("shake")) {
+      return milkshake;
+    }
     return milkshake;
   }
   
   // Juices & Lemonade
   if (categorySlug === "juices-lemonade") {
-    if (tagsLower.includes("lemonade")) return lemonade;
-    if (tagsLower.includes("juice")) return freshJuice;
+    if (tagsLower.includes("lemonade") || nameLower.includes("lemonade")) return lemonade;
+    if (tagsLower.includes("juice") || nameLower.includes("juice")) return freshJuice;
     return freshJuice;
   }
   
