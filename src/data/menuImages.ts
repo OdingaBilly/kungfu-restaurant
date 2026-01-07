@@ -6,6 +6,7 @@ import friedChicken from "@/assets/menu/fried-chicken.jpg";
 import chickenStrips from "@/assets/menu/chicken-strips.jpg";
 import crispyStrips from "@/assets/menu/crispy-strips.jpg";
 import streetPack from "@/assets/menu/street-pack.jpg";
+import streetPackFull from "@/assets/menu/street-pack-full.jpg";
 import chineseNoodles from "@/assets/menu/chinese-noodles.jpg";
 import chineseFish from "@/assets/menu/chinese-fish.jpg";
 import chineseFishSpicy from "@/assets/menu/chinese-fish-spicy.jpg";
@@ -13,6 +14,10 @@ import chapatiStew from "@/assets/menu/chapati-stew.jpg";
 import ugaliFish from "@/assets/menu/ugali-fish.jpg";
 import bobaTea from "@/assets/menu/boba-tea.png";
 import coffee from "@/assets/menu/coffee.jpg";
+import coffeeHot from "@/assets/menu/coffee-hot.jpg";
+import coffeeLatte from "@/assets/menu/coffee-latte.jpg";
+import icedCoffee from "@/assets/menu/iced-coffee.jpg";
+import frappeCoffee from "@/assets/menu/frappe-coffee.jpg";
 import strawberryMojito from "@/assets/menu/strawberry-mojito.jpg";
 import lemonade from "@/assets/menu/lemonade.jpg";
 import milkshake from "@/assets/menu/milkshake.jpg";
@@ -21,6 +26,12 @@ import iceCream from "@/assets/menu/ice-cream.jpg";
 import sandwich from "@/assets/menu/sandwich.jpg";
 import snacks from "@/assets/menu/snacks.jpg";
 import salad from "@/assets/menu/salad.jpg";
+import cornSalad from "@/assets/menu/corn-salad.jpg";
+import fruitSalad from "@/assets/menu/fruit-salad.jpg";
+
+// Snacks & Breakfast
+import chapati from "@/assets/menu/chapati.jpg";
+import mandazi from "@/assets/menu/mandazi.jpg";
 
 // Chinese & specialty images
 import seaweedSoup from "@/assets/menu/seaweed-soup.jpg";
@@ -48,16 +59,16 @@ export const categoryImages: Record<string, string> = {
   "burgers": classicBurger,
   "chicken-pieces": friedChicken,
   "strips-wraps": crispyStrips,
-  "street-packs": streetPack,
+  "street-packs": streetPackFull,
   "taste-of-china": kungpaoNoodles,
   "chinese-vegetarian-meat": vegetableStirFry,
   "chinese-seafood": chineseFishSpicy,
   "african": chickenCurry,
-  "snacks-breakfast": snacks,
-  "milk-teas-coffee": taroBoba,
+  "snacks-breakfast": mandazi,
+  "milk-teas-coffee": coffeeLatte,
   "shakes-mojito": milkshake,
   "juices-lemonade": freshJuice,
-  "salads-sauces": salad,
+  "salads-sauces": cornSalad,
   "ice-cream": iceCream,
 };
 
@@ -97,9 +108,9 @@ export function getItemImage(
     return crispyStrips;
   }
   
-  // Street packs
+  // Street packs - use full street pack image
   if (categorySlug === "street-packs") {
-    return streetPack;
+    return streetPackFull;
   }
   
   // Taste of China - Soups, Rice & Noodles, Duck & Chicken
@@ -181,16 +192,27 @@ export function getItemImage(
     return chickenCurry;
   }
   
-  // Drinks - Milk Teas & Coffee - IMPROVED MAPPING
+  // Drinks - Milk Teas & Coffee - IMPROVED MAPPING with new images
   if (categorySlug === "milk-teas-coffee") {
-    // Coffee drinks - all coffee variants
-    if (tagsLower.includes("coffee") || tagsLower.includes("espresso") || tagsLower.includes("latte") || 
-        tagsLower.includes("cappuccino") || tagsLower.includes("mocha") || tagsLower.includes("americano") ||
-        tagsLower.includes("macchiato") || tagsLower.includes("affogato") || tagsLower.includes("dawa") ||
-        nameLower.includes("coffee") || nameLower.includes("espresso") || nameLower.includes("latte") ||
-        nameLower.includes("cappuccino") || nameLower.includes("mocha") || nameLower.includes("americano") ||
-        nameLower.includes("flat white") || nameLower.includes("macchiato")) {
-      return coffee;
+    // Iced coffee drinks
+    if (nameLower.includes("iced") && (tagsLower.includes("coffee") || nameLower.includes("latte") || 
+        nameLower.includes("americano") || nameLower.includes("cappuccino") || nameLower.includes("mocha") ||
+        nameLower.includes("dawa"))) {
+      return icedCoffee;
+    }
+    // Frappe, mocha, affogato - rich/dessert coffee
+    if (nameLower.includes("affogato") || nameLower.includes("frappe") || 
+        (nameLower.includes("mocha") && !nameLower.includes("iced"))) {
+      return frappeCoffee;
+    }
+    // Hot lattes, cappuccino, flat white - milky coffee
+    if (nameLower.includes("latte") || nameLower.includes("cappuccino") || nameLower.includes("flat white")) {
+      return coffeeLatte;
+    }
+    // Espresso, americano, dawa, macchiato - strong/black coffee
+    if (tagsLower.includes("coffee") || nameLower.includes("espresso") || nameLower.includes("americano") ||
+        nameLower.includes("macchiato") || nameLower.includes("dawa")) {
+      return coffeeHot;
     }
     // Specific milk tea flavors
     if (nameLower.includes("vanilla")) return vanillaTea;
@@ -225,15 +247,21 @@ export function getItemImage(
     return freshJuice;
   }
   
-  // Snacks & Breakfast
+  // Snacks & Breakfast - use new images
   if (categorySlug === "snacks-breakfast") {
+    if (nameLower.includes("chapati") || nameLower.includes("roti")) return chapati;
+    if (nameLower.includes("mandazi") || nameLower.includes("doughnut")) return mandazi;
+    if (nameLower.includes("samosa") || nameLower.includes("pastry")) return mandazi;
     if (nameLower.includes("sandwich")) return sandwich;
-    return snacks;
+    return mandazi;
   }
   
-  // Salads
+  // Salads - use new images
   if (categorySlug === "salads-sauces" || tagsLower.includes("salad")) {
-    return salad;
+    if (nameLower.includes("fruit")) return fruitSalad;
+    if (nameLower.includes("corn") || nameLower.includes("mexican")) return cornSalad;
+    if (nameLower.includes("chicken")) return salad;
+    return cornSalad;
   }
   
   // Ice Cream

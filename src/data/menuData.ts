@@ -248,8 +248,8 @@ export const menuCategories: MenuCategory[] = [
     description: "Quick bites to start your day.",
     heroPhrase: "Morning Fuel.",
     items: [
-      { id: 80, sku: "SNK-CHIPS", name: "Chippitz", description: "Crispy potato chips", price: 100, calories: 150, tags: ["snack", "chips"] },
-      { id: 81, sku: "SNK-HANDLEZI", name: "Handlezi", description: "Traditional snack", price: 100, calories: 120, tags: ["snack", "traditional"] },
+      { id: 80, sku: "SNK-CHAPATI", name: "Chapati", description: "Soft, layered flatbread fresh off the pan", price: 100, calories: 150, tags: ["snack", "flatbread", "chapati"] },
+      { id: 81, sku: "SNK-MANDAZI", name: "Mandazi", description: "Golden fried East African doughnuts", price: 100, calories: 120, tags: ["snack", "traditional", "mandazi"] },
       { id: 82, sku: "SNK-PANCAKE", name: "Pancake", description: "Soft breakfast pancake", price: 100, calories: 200, tags: ["breakfast", "pancake"] },
       { id: 83, sku: "SNK-SAMOSA", name: "Samosa", description: "Spiced pastry filled with vegetables or meat", price: 100, calories: 180, tags: ["snack", "pastry"] },
       { id: 84, sku: "SNK-SANDWICH", name: "Sandwich", description: "Fresh sandwich with filling of choice", price: 700, calories: 320, tags: ["breakfast", "sandwich"] },
