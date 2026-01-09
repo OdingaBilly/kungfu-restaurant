@@ -1,47 +1,41 @@
-import DishCard from "./DishCard";
-import chickenFries from "@/assets/chicken-fries.jpg";
-import crispyChicken from "@/assets/crispy-chicken.jpg";
-import koreanKatsu from "@/assets/korean-katsu.jpg";
-import chapatiStew from "@/assets/chapati-stew.jpg";
-import sesameTofu from "@/assets/sesame-tofu.jpg";
+import { Link } from "react-router-dom";
+import { ArrowRight, Flame, Star } from "lucide-react";
+import { menuCategories, getAllItemsFromCategory, CURRENCY } from "@/data/menuData";
+import { getItemImage } from "@/data/menuImages";
 
-const dishes = [
-  {
-    image: crispyChicken,
-    name: "Dragon's Fire Chicken",
-    description: "Crispy fried chicken drizzled with our secret honey glaze. Pure flavor explosion.",
-    price: "$14.99",
-    tag: "Bestseller",
-  },
-  {
-    image: koreanKatsu,
-    name: "Kungfu Katsu Bowl",
-    description: "Spicy Korean-style crispy cutlet on fluffy rice with chili crunch.",
-    price: "$16.99",
-    tag: "Spicy",
-  },
-  {
-    image: chapatiStew,
-    name: "Warrior's Feast",
-    description: "Slow-cooked spiced stew with soft chapati. Comfort food at its finest.",
-    price: "$18.99",
-  },
-  {
-    image: sesameTofu,
-    name: "Golden Sesame Tofu",
-    description: "Crispy tofu in sweet chili glaze, topped with sesame and fresh scallions.",
-    price: "$12.99",
-    tag: "Vegan",
-  },
-  {
-    image: chickenFries,
-    name: "Panda Combo",
-    description: "Signature fried chicken with golden fries and our legendary dipping sauce.",
-    price: "$13.99",
-  },
-];
+// Featured dishes with category links
+const getFeaturedDishes = () => {
+  const featured = [
+    { categorySlug: "burgers", itemName: "Double Dragon", tag: "Bestseller" },
+    { categorySlug: "taste-of-china", itemName: "Stir-fried Free-range Chicken", tag: "Spicy" },
+    { categorySlug: "african", itemName: "Chapati with Beef & Vegetables", tag: null },
+    { categorySlug: "chicken-pieces", itemName: "6 Piecer", tag: "Value" },
+    { categorySlug: "milk-teas-coffee", itemName: "Boba Milk Tea", tag: "Popular" },
+  ];
+
+  return featured.map((f) => {
+    const category = menuCategories.find((c) => c.slug === f.categorySlug);
+    if (!category) return null;
+    
+    const items = getAllItemsFromCategory(category);
+    const item = items.find((i) => i.name === f.itemName);
+    
+    if (!item) return null;
+    
+    return {
+      ...item,
+      categorySlug: f.categorySlug,
+      categoryName: category.name,
+      tag: f.tag,
+    };
+  }).filter(Boolean);
+};
 
 const MenuSection = () => {
+  const dishes = getFeaturedDishes();
+
+  const formatPrice = (price: number) => `${CURRENCY} ${price.toLocaleString()}`;
+
   return (
     <section id="menu" className="py-24 bg-background">
       <div className="container px-6">
@@ -61,22 +55,69 @@ const MenuSection = () => {
 
         {/* Dishes Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {dishes.map((dish, index) => (
-            <div
-              key={dish.name}
-              className="animate-fade-in"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <DishCard {...dish} />
-            </div>
-          ))}
+          {dishes.map((dish, index) => {
+            if (!dish) return null;
+            
+            return (
+              <Link
+                to={`/menu?category=${dish.categorySlug}`}
+                key={dish.id}
+                className="card-dish group cursor-pointer animate-fade-in block"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                {/* Image */}
+                <div className="aspect-[4/5] overflow-hidden">
+                  <img
+                    src={getItemImage(dish.name, dish.categorySlug, dish.tags)}
+                    alt={dish.name}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                </div>
+
+                {/* Content Overlay */}
+                <div className="absolute inset-0 z-10 flex flex-col justify-end p-6">
+                  {/* Tags */}
+                  <div className="absolute top-4 right-4 flex gap-2">
+                    {dish.tag && (
+                      <span className="bg-primary text-primary-foreground text-xs font-bold uppercase px-3 py-1 rounded-full flex items-center gap-1">
+                        {dish.tag === "Spicy" && <Flame className="w-3 h-3" />}
+                        {dish.tag === "Bestseller" && <Star className="w-3 h-3 fill-current" />}
+                        {dish.tag}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Category Badge */}
+                  <span className="text-primary/80 text-xs font-medium uppercase tracking-wider mb-2">
+                    {dish.categoryName}
+                  </span>
+
+                  {/* Info */}
+                  <div className="transform transition-transform duration-500 group-hover:translate-y-0 translate-y-2">
+                    <h3 className="font-display text-2xl mb-2 text-foreground">{dish.name}</h3>
+                    <p className="text-foreground/70 text-sm mb-4 line-clamp-2">
+                      {dish.description}
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-primary font-bold text-xl">{formatPrice(dish.price)}</span>
+                      <span className="bg-foreground/10 hover:bg-primary text-foreground text-sm font-medium px-4 py-2 rounded-full transition-all duration-300 group-hover:bg-primary group-hover:scale-105 flex items-center gap-2">
+                        View Category
+                        <ArrowRight className="w-4 h-4" />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
         </div>
 
         {/* View All Button */}
         <div className="text-center mt-12">
-          <button className="btn-kungfu-outline">
+          <Link to="/menu" className="btn-kungfu-outline inline-flex items-center gap-2">
             View Full Menu
-          </button>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </div>
     </section>
