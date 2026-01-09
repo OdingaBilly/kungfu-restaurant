@@ -54,9 +54,10 @@ const FavoritesSection = () => {
         {/* Favorites Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {favorites.map((item, index) => (
-            <div
+            <Link
+              to={`/product/${item.sku}`}
               key={item.id}
-              className="group relative bg-card rounded-2xl overflow-hidden border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-[0_0_40px_hsla(0,100%,38%,0.15)]"
+              className="group relative bg-card rounded-2xl overflow-hidden border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-[0_0_40px_hsla(0,100%,38%,0.15)] block"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               {/* Badge */}
@@ -87,14 +88,17 @@ const FavoritesSection = () => {
                     {formatPrice(item.price)}
                   </span>
                   <button
-                    onClick={() => handleQuickAdd(item)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleQuickAdd(item);
+                    }}
                     className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-semibold px-4 py-2 rounded-full transition-all hover:scale-105"
                   >
                     Add
                   </button>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 

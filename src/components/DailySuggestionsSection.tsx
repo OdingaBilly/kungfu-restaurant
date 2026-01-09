@@ -73,9 +73,10 @@ const DailySuggestionsSection = () => {
         {/* Suggestions Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {suggestions.map((item, index) => (
-            <div
+            <Link
+              to={`/product/${item.sku}`}
               key={item.id}
-              className="group relative animate-fade-in"
+              className="group relative animate-fade-in block"
               style={{ animationDelay: `${index * 0.15}s` }}
             >
               {/* Card */}
@@ -120,7 +121,10 @@ const DailySuggestionsSection = () => {
                       )}
                     </div>
                     <button
-                      onClick={() => handleQuickAdd(item)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleQuickAdd(item);
+                      }}
                       className="btn-kungfu text-sm !px-5 !py-2.5"
                     >
                       Order Now
@@ -128,7 +132,7 @@ const DailySuggestionsSection = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 
