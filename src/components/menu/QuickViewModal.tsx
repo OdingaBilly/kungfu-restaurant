@@ -5,6 +5,7 @@ import { useCart } from "@/contexts/CartContext";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { getItemImage } from "@/data/menuImages";
+import ItemCustomization, { ADD_ONS } from "./ItemCustomization";
 
 interface QuickViewModalProps {
   item: MenuItem | null;
@@ -16,6 +17,8 @@ interface QuickViewModalProps {
 const QuickViewModal = ({ item, categorySlug = "burgers", isOpen, onClose }: QuickViewModalProps) => {
   const { addItem, setIsOpen: openCart } = useCart();
   const [quantity, setQuantity] = useState(1);
+  const [spiceLevel, setSpiceLevel] = useState(item?.spiceLevel || 0);
+  const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
 
   if (!item) return null;
 
@@ -25,11 +28,28 @@ const QuickViewModal = ({ item, categorySlug = "burgers", isOpen, onClose }: Qui
     return `${CURRENCY} ${price.toLocaleString()}`;
   };
 
+  const addOnsTotal = selectedAddOns.reduce((sum, id) => {
+    const addon = ADD_ONS.find((a) => a.id === id);
+    return sum + (addon?.price || 0);
+  }, 0);
+
+  const itemTotal = (item.price + addOnsTotal) * quantity;
+
+  const handleAddOnToggle = (addonId: string) => {
+    setSelectedAddOns((prev) =>
+      prev.includes(addonId)
+        ? prev.filter((id) => id !== addonId)
+        : [...prev, addonId]
+    );
+  };
+
   const handleAddToCart = () => {
     for (let i = 0; i < quantity; i++) {
       addItem(item);
     }
     setQuantity(1);
+    setSpiceLevel(item.spiceLevel || 0);
+    setSelectedAddOns([]);
     onClose();
     openCart(true);
   };
@@ -96,8 +116,16 @@ const QuickViewModal = ({ item, categorySlug = "burgers", isOpen, onClose }: Qui
             )}
           </div>
 
+          {/* Customization Options */}
+          <ItemCustomization
+            spiceLevel={spiceLevel}
+            onSpiceLevelChange={setSpiceLevel}
+            selectedAddOns={selectedAddOns}
+            onAddOnToggle={handleAddOnToggle}
+          />
+
           {/* Quantity selector */}
-          <div className="flex items-center justify-between gap-4 mb-6">
+          <div className="flex items-center justify-between gap-4 mt-5 mb-4">
             <span className="text-foreground/70 text-sm">Quantity</span>
             <div className="flex items-center gap-3 bg-secondary rounded-full p-1">
               <button
@@ -122,7 +150,7 @@ const QuickViewModal = ({ item, categorySlug = "burgers", isOpen, onClose }: Qui
             className="w-full btn-kungfu flex items-center justify-center gap-3"
           >
             <ShoppingCart className="w-5 h-5" />
-            Add {quantity} to Cart — {formatPrice(item.price * quantity)}
+            Add {quantity} to Cart — {formatPrice(itemTotal)}
           </button>
         </div>
       </DialogContent>
