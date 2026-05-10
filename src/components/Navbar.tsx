@@ -78,6 +78,16 @@ const Navbar = () => {
               )}
             </button>
 
+            {/* Account button */}
+            <Link
+              to={user ? "/account" : "/auth"}
+              className="relative p-2 hover:bg-secondary rounded-full transition-colors"
+              aria-label={user ? "My account" : "Sign in"}
+            >
+              <UserIcon className="w-5 h-5" />
+              {user && <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-primary rounded-full" />}
+            </Link>
+
             {/* CTA Button */}
             <Link to="/menu" className="btn-kungfu text-sm px-6 py-3 hidden sm:block">
               Order Now
