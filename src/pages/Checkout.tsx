@@ -1,26 +1,32 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, MapPin, CreditCard, Smartphone, CheckCircle2, Truck, Clock } from "lucide-react";
+import { ArrowLeft, MapPin, CreditCard, Smartphone, CheckCircle2, Truck, Clock, BookmarkPlus } from "lucide-react";
 import { useCart, CURRENCY } from "@/contexts/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import { getItemImage } from "@/data/menuImages";
 import { menuCategories, getAllItemsFromCategory } from "@/data/menuData";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
 
 type PaymentMethod = "mpesa" | "card" | "cash";
 
+interface SavedAddress { id: string; label: string | null; address: string; landmark: string | null; instructions: string | null; }
+
 const Checkout = () => {
   const { items, total, clearCart } = useCart();
+  const { user } = useAuth();
   const navigate = useNavigate();
   
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("mpesa");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [savedAddresses, setSavedAddresses] = useState<SavedAddress[]>([]);
+  const [saveAddress, setSaveAddress] = useState(false);
   
   // Form state
   const [formData, setFormData] = useState({
@@ -56,27 +62,91 @@ const Checkout = () => {
     }));
   };
 
+  // Prefill from profile + load saved addresses for logged-in users
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      const [{ data: profile }, { data: addrs }] = await Promise.all([
+        supabase.from("profiles").select("full_name, phone, email").eq("id", user.id).maybeSingle(),
+        supabase.from("addresses").select("id, label, address, landmark, instructions, is_default").eq("user_id", user.id).order("is_default", { ascending: false }),
+      ]);
+      if (profile) {
+        setFormData((prev) => ({
+          ...prev,
+          name: prev.name || profile.full_name || "",
+          phone: prev.phone || profile.phone || "",
+          email: prev.email || profile.email || user.email || "",
+        }));
+      }
+      if (addrs && addrs.length) {
+        setSavedAddresses(addrs);
+        const def = addrs[0];
+        setFormData((prev) => ({
+          ...prev,
+          address: prev.address || def.address,
+          landmark: prev.landmark || def.landmark || "",
+          instructions: prev.instructions || def.instructions || "",
+        }));
+      }
+    })();
+  }, [user]);
+
+  const pickAddress = (id: string) => {
+    const a = savedAddresses.find((x) => x.id === id);
+    if (!a) return;
+    setFormData((prev) => ({ ...prev, address: a.address, landmark: a.landmark || "", instructions: a.instructions || "" }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!formData.name || !formData.phone || !formData.address) {
       toast.error("Please fill in all required fields");
       return;
     }
-
     if (items.length === 0) {
       toast.error("Your cart is empty");
       return;
     }
 
     setIsSubmitting(true);
-    
-    // Simulate order processing
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    
-    setOrderPlaced(true);
-    clearCart();
-    setIsSubmitting(false);
+    try {
+      const { error } = await supabase.from("orders").insert({
+        user_id: user?.id ?? null,
+        customer_name: formData.name,
+        customer_phone: formData.phone,
+        customer_email: formData.email || null,
+        delivery_address: formData.address,
+        landmark: formData.landmark || null,
+        instructions: formData.instructions || null,
+        payment_method: paymentMethod,
+        subtotal: total,
+        delivery_fee: deliveryFee,
+        total: grandTotal,
+        items: items.map((i) => ({ sku: i.sku, name: i.name, price: i.price, quantity: i.quantity })),
+      });
+
+      if (error) {
+        toast.error(`Could not place order: ${error.message}`);
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Optionally save the address for logged-in users
+      if (user && saveAddress && formData.address.trim()) {
+        await supabase.from("addresses").insert({
+          user_id: user.id,
+          address: formData.address,
+          landmark: formData.landmark || null,
+          instructions: formData.instructions || null,
+          is_default: savedAddresses.length === 0,
+        });
+      }
+
+      setOrderPlaced(true);
+      clearCart();
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (orderPlaced) {
@@ -171,6 +241,31 @@ const Checkout = () => {
                   </div>
                 </div>
 
+                {!user && (
+                  <div className="mb-4 p-3 rounded-xl bg-primary/10 border border-primary/30 text-sm">
+                    Have an account? <Link to="/auth?redirect=/checkout" className="text-primary font-semibold hover:underline">Sign in</Link> to autofill & save this order to your history.
+                  </div>
+                )}
+
+                {savedAddresses.length > 0 && (
+                  <div className="mb-4">
+                    <Label className="text-xs uppercase tracking-wider text-foreground/60">Saved addresses</Label>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {savedAddresses.map((a) => (
+                        <button
+                          type="button"
+                          key={a.id}
+                          onClick={() => pickAddress(a.id)}
+                          className="px-3 py-2 text-xs border border-border rounded-lg hover:bg-secondary transition-colors text-left max-w-[200px]"
+                        >
+                          <span className="font-semibold block">{a.label || "Address"}</span>
+                          <span className="text-foreground/60 line-clamp-1">{a.address}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name *</Label>
@@ -238,6 +333,19 @@ const Checkout = () => {
                     />
                   </div>
                 </div>
+
+                {user && (
+                  <label className="flex items-center gap-2 mt-4 text-sm cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={saveAddress}
+                      onChange={(e) => setSaveAddress(e.target.checked)}
+                      className="w-4 h-4 accent-primary"
+                    />
+                    <BookmarkPlus className="w-4 h-4 text-primary" />
+                    Save this address for next time
+                  </label>
+                )}
               </div>
 
               {/* Payment Method */}

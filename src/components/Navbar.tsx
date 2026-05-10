@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ShoppingCart, Menu as MenuIcon, X } from "lucide-react";
+import { ShoppingCart, Menu as MenuIcon, X, User as UserIcon } from "lucide-react";
 import logo from "@/assets/logo.jpeg";
 import { useCart } from "@/contexts/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { itemCount, setIsOpen } = useCart();
+  const { user } = useAuth();
   const location = useLocation();
 
   useEffect(() => {
@@ -75,6 +77,16 @@ const Navbar = () => {
                 </span>
               )}
             </button>
+
+            {/* Account button */}
+            <Link
+              to={user ? "/account" : "/auth"}
+              className="relative p-2 hover:bg-secondary rounded-full transition-colors"
+              aria-label={user ? "My account" : "Sign in"}
+            >
+              <UserIcon className="w-5 h-5" />
+              {user && <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-primary rounded-full" />}
+            </Link>
 
             {/* CTA Button */}
             <Link to="/menu" className="btn-kungfu text-sm px-6 py-3 hidden sm:block">
