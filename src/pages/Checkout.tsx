@@ -333,6 +333,19 @@ const Checkout = () => {
                     />
                   </div>
                 </div>
+
+                {user && (
+                  <label className="flex items-center gap-2 mt-4 text-sm cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={saveAddress}
+                      onChange={(e) => setSaveAddress(e.target.checked)}
+                      className="w-4 h-4 accent-primary"
+                    />
+                    <BookmarkPlus className="w-4 h-4 text-primary" />
+                    Save this address for next time
+                  </label>
+                )}
               </div>
 
               {/* Payment Method */}
