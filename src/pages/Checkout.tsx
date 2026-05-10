@@ -241,6 +241,31 @@ const Checkout = () => {
                   </div>
                 </div>
 
+                {!user && (
+                  <div className="mb-4 p-3 rounded-xl bg-primary/10 border border-primary/30 text-sm">
+                    Have an account? <Link to="/auth?redirect=/checkout" className="text-primary font-semibold hover:underline">Sign in</Link> to autofill & save this order to your history.
+                  </div>
+                )}
+
+                {savedAddresses.length > 0 && (
+                  <div className="mb-4">
+                    <Label className="text-xs uppercase tracking-wider text-foreground/60">Saved addresses</Label>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {savedAddresses.map((a) => (
+                        <button
+                          type="button"
+                          key={a.id}
+                          onClick={() => pickAddress(a.id)}
+                          className="px-3 py-2 text-xs border border-border rounded-lg hover:bg-secondary transition-colors text-left max-w-[200px]"
+                        >
+                          <span className="font-semibold block">{a.label || "Address"}</span>
+                          <span className="text-foreground/60 line-clamp-1">{a.address}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name *</Label>
