@@ -1,26 +1,32 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, MapPin, CreditCard, Smartphone, CheckCircle2, Truck, Clock } from "lucide-react";
+import { ArrowLeft, MapPin, CreditCard, Smartphone, CheckCircle2, Truck, Clock, BookmarkPlus } from "lucide-react";
 import { useCart, CURRENCY } from "@/contexts/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import { getItemImage } from "@/data/menuImages";
 import { menuCategories, getAllItemsFromCategory } from "@/data/menuData";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
 
 type PaymentMethod = "mpesa" | "card" | "cash";
 
+interface SavedAddress { id: string; label: string | null; address: string; landmark: string | null; instructions: string | null; }
+
 const Checkout = () => {
   const { items, total, clearCart } = useCart();
+  const { user } = useAuth();
   const navigate = useNavigate();
   
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("mpesa");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [savedAddresses, setSavedAddresses] = useState<SavedAddress[]>([]);
+  const [saveAddress, setSaveAddress] = useState(false);
   
   // Form state
   const [formData, setFormData] = useState({
