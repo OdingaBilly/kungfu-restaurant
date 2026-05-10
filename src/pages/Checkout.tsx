@@ -62,27 +62,91 @@ const Checkout = () => {
     }));
   };
 
+  // Prefill from profile + load saved addresses for logged-in users
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      const [{ data: profile }, { data: addrs }] = await Promise.all([
+        supabase.from("profiles").select("full_name, phone, email").eq("id", user.id).maybeSingle(),
+        supabase.from("addresses").select("id, label, address, landmark, instructions, is_default").eq("user_id", user.id).order("is_default", { ascending: false }),
+      ]);
+      if (profile) {
+        setFormData((prev) => ({
+          ...prev,
+          name: prev.name || profile.full_name || "",
+          phone: prev.phone || profile.phone || "",
+          email: prev.email || profile.email || user.email || "",
+        }));
+      }
+      if (addrs && addrs.length) {
+        setSavedAddresses(addrs);
+        const def = addrs[0];
+        setFormData((prev) => ({
+          ...prev,
+          address: prev.address || def.address,
+          landmark: prev.landmark || def.landmark || "",
+          instructions: prev.instructions || def.instructions || "",
+        }));
+      }
+    })();
+  }, [user]);
+
+  const pickAddress = (id: string) => {
+    const a = savedAddresses.find((x) => x.id === id);
+    if (!a) return;
+    setFormData((prev) => ({ ...prev, address: a.address, landmark: a.landmark || "", instructions: a.instructions || "" }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!formData.name || !formData.phone || !formData.address) {
       toast.error("Please fill in all required fields");
       return;
     }
-
     if (items.length === 0) {
       toast.error("Your cart is empty");
       return;
     }
 
     setIsSubmitting(true);
-    
-    // Simulate order processing
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    
-    setOrderPlaced(true);
-    clearCart();
-    setIsSubmitting(false);
+    try {
+      const { error } = await supabase.from("orders").insert({
+        user_id: user?.id ?? null,
+        customer_name: formData.name,
+        customer_phone: formData.phone,
+        customer_email: formData.email || null,
+        delivery_address: formData.address,
+        landmark: formData.landmark || null,
+        instructions: formData.instructions || null,
+        payment_method: paymentMethod,
+        subtotal: total,
+        delivery_fee: deliveryFee,
+        total: grandTotal,
+        items: items.map((i) => ({ sku: i.sku, name: i.name, price: i.price, quantity: i.quantity })),
+      });
+
+      if (error) {
+        toast.error(`Could not place order: ${error.message}`);
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Optionally save the address for logged-in users
+      if (user && saveAddress && formData.address.trim()) {
+        await supabase.from("addresses").insert({
+          user_id: user.id,
+          address: formData.address,
+          landmark: formData.landmark || null,
+          instructions: formData.instructions || null,
+          is_default: savedAddresses.length === 0,
+        });
+      }
+
+      setOrderPlaced(true);
+      clearCart();
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (orderPlaced) {
