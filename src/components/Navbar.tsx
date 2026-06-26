@@ -11,6 +11,7 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { itemCount, setIsOpen } = useCart();
   const { user } = useAuth();
+  const { isAdmin } = useIsAdmin();
   const location = useLocation();
 
   useEffect(() => {
