@@ -117,7 +117,8 @@ const AdminItems = () => {
 
   const toggleMutation = useMutation({
     mutationFn: async ({ id, field, value }: { id: string; field: "is_featured" | "is_available"; value: boolean }) => {
-      const { error } = await supabase.from("menu_items").update({ [field]: value } as Record<string, boolean>).eq("id", id);
+      const update = field === "is_featured" ? { is_featured: value } : { is_available: value };
+      const { error } = await supabase.from("menu_items").update(update).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
