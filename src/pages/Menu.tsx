@@ -50,7 +50,11 @@ const Menu = () => {
     });
 
     return () => observer.disconnect();
-  }, []);
+  }, [menuCategories]);
+
+  useEffect(() => {
+    if (!activeCategory && menuCategories[0]) setActiveCategory(menuCategories[0].slug);
+  }, [menuCategories, activeCategory]);
 
   return (
     <div className="min-h-screen bg-background">
