@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ShoppingCart, Menu as MenuIcon, X, User as UserIcon } from "lucide-react";
+import { ShoppingCart, Menu as MenuIcon, X, User as UserIcon, Shield } from "lucide-react";
 import logo from "@/assets/logo.jpeg";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
