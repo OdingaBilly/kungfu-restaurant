@@ -12,6 +12,12 @@ import Product from "./pages/Product";
 import Auth from "./pages/Auth";
 import Account from "./pages/Account";
 import NotFound from "./pages/NotFound";
+import AdminGuard from "./components/admin/AdminGuard";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminItems from "./pages/admin/AdminItems";
+import AdminCategories from "./pages/admin/AdminCategories";
+import AdminOrders from "./pages/admin/AdminOrders";
+import AdminStaff from "./pages/admin/AdminStaff";
 
 const queryClient = new QueryClient();
 
