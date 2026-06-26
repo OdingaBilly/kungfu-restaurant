@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ShoppingCart, Menu as MenuIcon, X, User as UserIcon } from "lucide-react";
+import { ShoppingCart, Menu as MenuIcon, X, User as UserIcon, Shield } from "lucide-react";
 import logo from "@/assets/logo.jpeg";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { itemCount, setIsOpen } = useCart();
   const { user } = useAuth();
+  const { isAdmin } = useIsAdmin();
   const location = useLocation();
 
   useEffect(() => {
@@ -77,6 +79,17 @@ const Navbar = () => {
                 </span>
               )}
             </button>
+
+            {/* Admin button */}
+            {isAdmin && (
+              <Link
+                to="/admin"
+                className="relative p-2 hover:bg-secondary rounded-full transition-colors"
+                aria-label="Admin dashboard"
+              >
+                <Shield className="w-5 h-5 text-primary" />
+              </Link>
+            )}
 
             {/* Account button */}
             <Link

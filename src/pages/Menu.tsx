@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { menuCategories, MenuItem } from "@/data/menuData";
+import { MenuItem } from "@/data/menuData";
+import { useMenu } from "@/hooks/useMenu";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CategoryTabs from "@/components/menu/CategoryTabs";
@@ -9,7 +10,8 @@ import FloatingCart from "@/components/menu/FloatingCart";
 import CartDrawer from "@/components/menu/CartDrawer";
 
 const Menu = () => {
-  const [activeCategory, setActiveCategory] = useState(menuCategories[0]?.slug || "");
+  const { categories: menuCategories } = useMenu();
+  const [activeCategory, setActiveCategory] = useState("");
   const [quickViewItem, setQuickViewItem] = useState<MenuItem | null>(null);
   const [quickViewCategory, setQuickViewCategory] = useState<string>("burgers");
 
@@ -48,7 +50,11 @@ const Menu = () => {
     });
 
     return () => observer.disconnect();
-  }, []);
+  }, [menuCategories]);
+
+  useEffect(() => {
+    if (!activeCategory && menuCategories[0]) setActiveCategory(menuCategories[0].slug);
+  }, [menuCategories, activeCategory]);
 
   return (
     <div className="min-h-screen bg-background">
