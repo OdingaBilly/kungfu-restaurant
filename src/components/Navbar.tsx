@@ -80,6 +80,17 @@ const Navbar = () => {
               )}
             </button>
 
+            {/* Admin button */}
+            {isAdmin && (
+              <Link
+                to="/admin"
+                className="relative p-2 hover:bg-secondary rounded-full transition-colors"
+                aria-label="Admin dashboard"
+              >
+                <Shield className="w-5 h-5 text-primary" />
+              </Link>
+            )}
+
             {/* Account button */}
             <Link
               to={user ? "/account" : "/auth"}
