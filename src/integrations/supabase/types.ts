@@ -369,6 +369,101 @@ export type Database = {
         }
         Relationships: []
       }
+      purchase_order_lines: {
+        Row: {
+          created_at: string
+          id: string
+          inventory_item_id: string | null
+          name: string
+          purchase_order_id: string
+          quantity: number
+          unit_cost: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          inventory_item_id?: string | null
+          name: string
+          purchase_order_id: string
+          quantity?: number
+          unit_cost?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          inventory_item_id?: string | null
+          name?: string
+          purchase_order_id?: string
+          quantity?: number
+          unit_cost?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "purchase_order_lines_inventory_item_id_fkey"
+            columns: ["inventory_item_id"]
+            isOneToOne: false
+            referencedRelation: "inventory_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "purchase_order_lines_purchase_order_id_fkey"
+            columns: ["purchase_order_id"]
+            isOneToOne: false
+            referencedRelation: "purchase_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      purchase_orders: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          expected_date: string | null
+          id: string
+          notes: string | null
+          order_date: string | null
+          received_date: string | null
+          status: Database["public"]["Enums"]["po_status"]
+          supplier_id: string | null
+          total: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          expected_date?: string | null
+          id?: string
+          notes?: string | null
+          order_date?: string | null
+          received_date?: string | null
+          status?: Database["public"]["Enums"]["po_status"]
+          supplier_id?: string | null
+          total?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          expected_date?: string | null
+          id?: string
+          notes?: string | null
+          order_date?: string | null
+          received_date?: string | null
+          status?: Database["public"]["Enums"]["po_status"]
+          supplier_id?: string | null
+          total?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "purchase_orders_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       suppliers: {
         Row: {
           address: string | null
@@ -448,6 +543,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "manager" | "staff"
+      po_status: "draft" | "ordered" | "received" | "cancelled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -576,6 +672,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "manager", "staff"],
+      po_status: ["draft", "ordered", "received", "cancelled"],
     },
   },
 } as const
