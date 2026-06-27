@@ -20,6 +20,7 @@ import AdminOrders from "./pages/admin/AdminOrders";
 import AdminStaff from "./pages/admin/AdminStaff";
 import AdminSuppliers from "./pages/admin/AdminSuppliers";
 import AdminInventory from "./pages/admin/AdminInventory";
+import AdminPurchaseOrders from "./pages/admin/AdminPurchaseOrders";
 
 const queryClient = new QueryClient();
 
