@@ -10,6 +10,7 @@ import {
   Store,
   Truck,
   Boxes,
+  ClipboardList,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
