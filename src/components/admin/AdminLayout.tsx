@@ -20,6 +20,8 @@ const navItems = [
   { to: "/admin/items", label: "Listings & Pricing", icon: UtensilsCrossed },
   { to: "/admin/categories", label: "Categories", icon: FolderTree },
   { to: "/admin/orders", label: "Orders", icon: ShoppingBag },
+  { to: "/admin/suppliers", label: "Suppliers", icon: Truck },
+  { to: "/admin/inventory", label: "Inventory", icon: Boxes },
   { to: "/admin/staff", label: "Staff & Roles", icon: Users, adminOnly: true },
 ];
 
