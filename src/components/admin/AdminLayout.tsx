@@ -23,6 +23,7 @@ const navItems = [
   { to: "/admin/orders", label: "Orders", icon: ShoppingBag },
   { to: "/admin/suppliers", label: "Suppliers", icon: Truck },
   { to: "/admin/inventory", label: "Inventory", icon: Boxes },
+  { to: "/admin/purchase-orders", label: "Purchase Orders", icon: ClipboardList },
   { to: "/admin/staff", label: "Staff & Roles", icon: Users, adminOnly: true },
 ];
 
