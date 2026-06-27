@@ -8,6 +8,8 @@ import {
   Users,
   LogOut,
   Store,
+  Truck,
+  Boxes,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
