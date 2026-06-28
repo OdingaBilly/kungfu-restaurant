@@ -52,12 +52,16 @@ const HeroSection = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{ animationDelay: "0.5s" }}>
-            <button className="btn-kungfu text-lg">
-              View Menu
-            </button>
-            <button className="btn-kungfu-outline text-lg">
-              Our Story
-            </button>
+            <motion.div whileTap={{ scale: 0.95 }}>
+              <Link to="/menu" className="btn-kungfu text-lg inline-block">
+                View Menu
+              </Link>
+            </motion.div>
+            <motion.div whileTap={{ scale: 0.95 }}>
+              <a href="/#about" className="btn-kungfu-outline text-lg inline-block">
+                Our Story
+              </a>
+            </motion.div>
           </div>
         </div>
       </div>
