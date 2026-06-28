@@ -119,6 +119,7 @@ const MenuSection = () => {
                   </div>
                 </div>
               </Link>
+              </motion.div>
             );
           })}
         </div>
