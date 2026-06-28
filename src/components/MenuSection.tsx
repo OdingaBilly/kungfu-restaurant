@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { ArrowRight, Flame, Star } from "lucide-react";
 import { menuCategories, getAllItemsFromCategory, CURRENCY } from "@/data/menuData";
 import { getItemImage } from "@/data/menuImages";
+import Reveal from "@/components/Reveal";
 
 // Featured dishes with category links
 const getFeaturedDishes = () => {
