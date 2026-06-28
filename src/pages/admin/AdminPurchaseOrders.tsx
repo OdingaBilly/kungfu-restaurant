@@ -347,6 +347,9 @@ const AdminPurchaseOrders = () => {
                   <Button variant="outline" size="sm" onClick={() => setViewId(po.id)}>
                     <Eye className="h-3.5 w-3.5" />
                   </Button>
+                  <Button variant="outline" size="sm" onClick={() => downloadPdf(po)} title="Download PO PDF">
+                    <Download className="h-3.5 w-3.5" />
+                  </Button>
                   <Button variant="ghost" size="sm" onClick={() => setDeleteId(po.id)}>
                     <Trash2 className="h-3.5 w-3.5 text-destructive" />
                   </Button>
