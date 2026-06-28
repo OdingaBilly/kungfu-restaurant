@@ -10,10 +10,14 @@ const HeroSection = () => {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0">
-        <img
+        <motion.img
           src={chickenSpread}
           alt="Delicious food"
           className="w-full h-full object-cover"
+          initial={{ scale: 1.15 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
+          fetchPriority="high"
         />
         <div className="absolute inset-0 bg-hero-overlay" />
       </div>
