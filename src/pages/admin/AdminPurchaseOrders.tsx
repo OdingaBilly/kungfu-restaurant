@@ -20,8 +20,10 @@ import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Plus, Trash2, Sparkles, Eye, ClipboardList } from "lucide-react";
+import { Plus, Trash2, Sparkles, Eye, ClipboardList, Download } from "lucide-react";
 import { toast } from "sonner";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 type PoStatus = "draft" | "ordered" | "received" | "cancelled";
 
