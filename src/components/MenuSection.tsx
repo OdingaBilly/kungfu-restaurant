@@ -42,7 +42,7 @@ const MenuSection = () => {
     <section id="menu" className="py-24 bg-background">
       <div className="container px-6">
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <Reveal className="text-center mb-16">
           <span className="text-primary font-medium text-sm uppercase tracking-widest mb-4 block">
             Our Signature Dishes
           </span>
@@ -53,7 +53,8 @@ const MenuSection = () => {
           <p className="text-foreground/60 max-w-xl mx-auto">
             Every dish is crafted with passion, precision, and a touch of kungfu magic.
           </p>
-        </div>
+        </Reveal>
+
 
         {/* Dishes Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
