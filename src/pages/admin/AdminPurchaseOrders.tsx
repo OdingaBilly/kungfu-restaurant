@@ -113,6 +113,67 @@ const AdminPurchaseOrders = () => {
 
   const supplierName = (id: string | null) => suppliers.find((s) => s.id === id)?.name ?? "—";
 
+  const downloadPdf = async (po: PurchaseOrder) => {
+    try {
+      const [{ data: lineRows, error: lErr }, { data: supplier }] = await Promise.all([
+        supabase.from("purchase_order_lines").select("*").eq("purchase_order_id", po.id),
+        po.supplier_id
+          ? supabase.from("suppliers").select("*").eq("id", po.supplier_id).maybeSingle()
+          : Promise.resolve({ data: null } as any),
+      ]);
+      if (lErr) throw lErr;
+      const rows = (lineRows ?? []) as Line[];
+
+      const doc = new jsPDF();
+      const m = 14;
+      doc.setFontSize(18);
+      doc.text("Purchase Order", m, 18);
+      doc.setFontSize(10);
+      doc.setTextColor(120);
+      doc.text(`PO #${po.id.slice(0, 8).toUpperCase()}`, m, 25);
+      doc.setTextColor(0);
+
+      const info: string[] = [];
+      info.push(`Supplier: ${supplier?.name ?? supplierName(po.supplier_id)}`);
+      if (supplier?.contact_name) info.push(`Contact: ${supplier.contact_name}`);
+      if (supplier?.email) info.push(`Email: ${supplier.email}`);
+      if (supplier?.phone) info.push(`Phone: ${supplier.phone}`);
+      info.push(`Status: ${STATUS_META[po.status].label}`);
+      info.push(`Order date: ${po.order_date ?? "—"}`);
+      info.push(`Expected: ${po.expected_date ?? "—"}`);
+      info.push(`Received: ${po.received_date ?? "—"}`);
+      doc.setFontSize(11);
+      info.forEach((line, i) => doc.text(line, m, 35 + i * 6));
+
+      autoTable(doc, {
+        startY: 35 + info.length * 6 + 4,
+        head: [["Item", "Qty", "Unit cost (KES)", "Subtotal (KES)"]],
+        body: rows.map((l) => [
+          l.name,
+          String(l.quantity),
+          Number(l.unit_cost).toLocaleString(),
+          (Number(l.quantity) * Number(l.unit_cost)).toLocaleString(),
+        ]),
+        foot: [["", "", "Total", `KES ${Number(po.total).toLocaleString()}`]],
+        headStyles: { fillColor: [196, 0, 0] },
+        footStyles: { fillColor: [240, 240, 240], textColor: 0, fontStyle: "bold" },
+      });
+
+      if (po.notes) {
+        const y = (doc as any).lastAutoTable.finalY + 10;
+        doc.setFontSize(11);
+        doc.text("Notes:", m, y);
+        doc.setFontSize(10);
+        doc.setTextColor(80);
+        doc.text(doc.splitTextToSize(po.notes, 180), m, y + 6);
+      }
+
+      doc.save(`purchase-order-${po.id.slice(0, 8)}.pdf`);
+    } catch (e: any) {
+      toast.error(e.message ?? "Failed to generate PDF");
+    }
+  };
+
   const resetForm = () => {
     setSupplierId(null);
     setExpectedDate("");
