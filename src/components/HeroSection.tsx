@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import TypeWriter from "./TypeWriter";
 import chickenSpread from "@/assets/chicken-spread.jpg";
 
