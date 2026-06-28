@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import TypeWriter from "./TypeWriter";
 import chickenSpread from "@/assets/chicken-spread.jpg";
 
@@ -8,10 +10,14 @@ const HeroSection = () => {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0">
-        <img
+        <motion.img
           src={chickenSpread}
           alt="Delicious food"
           className="w-full h-full object-cover"
+          initial={{ scale: 1.15 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
+          fetchPriority="high"
         />
         <div className="absolute inset-0 bg-hero-overlay" />
       </div>
@@ -46,12 +52,16 @@ const HeroSection = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{ animationDelay: "0.5s" }}>
-            <button className="btn-kungfu text-lg">
-              View Menu
-            </button>
-            <button className="btn-kungfu-outline text-lg">
-              Our Story
-            </button>
+            <motion.div whileTap={{ scale: 0.95 }}>
+              <Link to="/menu" className="btn-kungfu text-lg inline-block">
+                View Menu
+              </Link>
+            </motion.div>
+            <motion.div whileTap={{ scale: 0.95 }}>
+              <a href="/#about" className="btn-kungfu-outline text-lg inline-block">
+                Our Story
+              </a>
+            </motion.div>
           </div>
         </div>
       </div>

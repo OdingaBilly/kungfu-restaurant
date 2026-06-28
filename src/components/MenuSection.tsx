@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { ArrowRight, Flame, Star } from "lucide-react";
 import { menuCategories, getAllItemsFromCategory, CURRENCY } from "@/data/menuData";
 import { getItemImage } from "@/data/menuImages";
+import Reveal from "@/components/Reveal";
 
 // Featured dishes with category links
 const getFeaturedDishes = () => {
@@ -40,7 +42,7 @@ const MenuSection = () => {
     <section id="menu" className="py-24 bg-background">
       <div className="container px-6">
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <Reveal className="text-center mb-16">
           <span className="text-primary font-medium text-sm uppercase tracking-widest mb-4 block">
             Our Signature Dishes
           </span>
@@ -51,7 +53,8 @@ const MenuSection = () => {
           <p className="text-foreground/60 max-w-xl mx-auto">
             Every dish is crafted with passion, precision, and a touch of kungfu magic.
           </p>
-        </div>
+        </Reveal>
+
 
         {/* Dishes Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
@@ -59,20 +62,29 @@ const MenuSection = () => {
             if (!dish) return null;
             
             return (
+              <motion.div
+                key={dish.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.5, delay: (index % 3) * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                whileHover={{ y: -6 }}
+                whileTap={{ scale: 0.98 }}
+              >
               <Link
                 to={`/menu?category=${dish.categorySlug}`}
-                key={dish.id}
-                className="card-dish group cursor-pointer animate-fade-in block"
-                style={{ animationDelay: `${index * 0.1}s` }}
+                className="card-dish group cursor-pointer block"
               >
                 {/* Image */}
                 <div className="aspect-[4/5] overflow-hidden">
                   <img
                     src={getItemImage(dish.name, dish.categorySlug, dish.tags)}
                     alt={dish.name}
+                    loading="lazy"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                 </div>
+
 
                 {/* Content Overlay */}
                 <div className="absolute inset-0 z-10 flex flex-col justify-end p-6">
@@ -108,6 +120,7 @@ const MenuSection = () => {
                   </div>
                 </div>
               </Link>
+              </motion.div>
             );
           })}
         </div>
