@@ -61,20 +61,29 @@ const MenuSection = () => {
             if (!dish) return null;
             
             return (
+              <motion.div
+                key={dish.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.5, delay: (index % 3) * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                whileHover={{ y: -6 }}
+                whileTap={{ scale: 0.98 }}
+              >
               <Link
                 to={`/menu?category=${dish.categorySlug}`}
-                key={dish.id}
-                className="card-dish group cursor-pointer animate-fade-in block"
-                style={{ animationDelay: `${index * 0.1}s` }}
+                className="card-dish group cursor-pointer block"
               >
                 {/* Image */}
                 <div className="aspect-[4/5] overflow-hidden">
                   <img
                     src={getItemImage(dish.name, dish.categorySlug, dish.tags)}
                     alt={dish.name}
+                    loading="lazy"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                 </div>
+
 
                 {/* Content Overlay */}
                 <div className="absolute inset-0 z-10 flex flex-col justify-end p-6">
