@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Flame } from "lucide-react";
+import { Plus, Flame, Check } from "lucide-react";
 import { MenuItem, CURRENCY } from "@/data/menuData";
 import { useCart } from "@/contexts/CartContext";
 import { cn } from "@/lib/utils";
