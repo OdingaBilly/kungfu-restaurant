@@ -92,8 +92,8 @@ const MenuItemCard = ({ item, categorySlug = "burgers", onQuickView }: MenuItemC
               isAdding && "animate-bounce bg-green-600"
             )}
           >
-            <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            <span className="hidden sm:inline">{isAdding ? "Added!" : "Add"}</span>
+            {isAdding ? <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
+            <span className={cn(isAdding ? "inline" : "hidden sm:inline")}>{isAdding ? "Added!" : "Add"}</span>
           </button>
         </div>
       </div>
