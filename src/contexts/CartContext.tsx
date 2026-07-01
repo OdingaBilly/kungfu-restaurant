@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
 import { MenuItem, CURRENCY } from "@/data/menuData";
 
 export interface CartItem {
@@ -7,6 +7,8 @@ export interface CartItem {
   price: number;
   quantity: number;
 }
+
+const STORAGE_KEY = "kungfu-cart-v1";
 
 interface CartContextType {
   items: CartItem[];
@@ -18,15 +20,35 @@ interface CartContextType {
   total: number;
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
+  lastAddedSku: string | null;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [items, setItems] = useState<CartItem[]>([]);
+  const [items, setItems] = useState<CartItem[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const stored = window.localStorage.getItem(STORAGE_KEY);
+      return stored ? (JSON.parse(stored) as CartItem[]) : [];
+    } catch {
+      return [];
+    }
+  });
   const [isOpen, setIsOpen] = useState(false);
+  const [lastAddedSku, setLastAddedSku] = useState<string | null>(null);
+
+  // Persist cart across navigation and reloads
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    } catch {
+      // ignore quota / privacy-mode errors
+    }
+  }, [items]);
 
   const addItem = useCallback((item: MenuItem) => {
+    setLastAddedSku(item.sku ?? null);
     setItems((prev) => {
       const existing = prev.find((i) => i.sku === item.sku);
       if (existing) {
@@ -71,6 +93,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         total,
         isOpen,
         setIsOpen,
+        lastAddedSku,
       }}
     >
       {children}
